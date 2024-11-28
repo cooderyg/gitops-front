@@ -57,3 +57,14 @@ jobs:
           service: ecs-front-service #ecs-front-service
           cluster: ecs-cluster #ecs-cluster
           wait-for-service-stability: true
+      - name: Github Actions - Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: CICD-Frontend-PRD
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+          mention: seongmi.lee
+          if_mention: failure,cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always() # Pick up events even if the job fails or is canceled.
